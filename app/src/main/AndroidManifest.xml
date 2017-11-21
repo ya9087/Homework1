@@ -22,6 +22,8 @@
         <activity android:name=".MenuDetailActivity"
             android:parentActivityName=".RestaurantDetailActivity"> </activity>
         <activity android:name=".RestaurantDetailActivity"> </activity>
+        <activity android:name=".MenuRegistrationActivity"> </activity>
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

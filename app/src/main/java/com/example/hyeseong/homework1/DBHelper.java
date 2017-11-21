@@ -1,5 +1,6 @@
 package com.example.hyeseong.homework1;
 
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,12 +19,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.i(TAG,getClass().getName()+".onCreate()");
         db.execSQL(RestaurantInformation.Restaurants.CREATE_TABLE);
+        db.execSQL(RestaurantInformation.Menu.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         Log.i(TAG,getClass().getName() +".onUpgrade()");
         db.execSQL(RestaurantInformation.Restaurants.DELETE_TABLE);
+        db.execSQL(RestaurantInformation.Menu.DELETE_TABLE);
         onCreate(db);
     }
 
@@ -37,14 +40,25 @@ public class DBHelper extends SQLiteOpenHelper {
         return db.insert(RestaurantInformation.Restaurants.TABLE_NAME,null,values);
     }
 
+    public long insertMenuByMethod(String name, String price, String explanation) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(RestaurantInformation.Menu.KEY_NAME, name);
+        values.put(RestaurantInformation.Menu.KEY_Price, price);
+        values.put(RestaurantInformation.Menu.KEY_Explanation,explanation);
+
+        return db.insert(RestaurantInformation.Menu.TABLE_NAME,null,values);
+    }
+
     public Cursor getAllUsersBySQL() {
         String sql = "Select * FROM " + RestaurantInformation.Restaurants.TABLE_NAME;
         return getReadableDatabase().rawQuery(sql,null);
     }
 
-    public Cursor getAllUsersByMethod() {
-        SQLiteDatabase db = getReadableDatabase();
-        return db.query(RestaurantInformation.Restaurants.TABLE_NAME,null,null,null,null,null,null);
+    public Cursor getAllMenusBySQL() {
+        String sql = "Select * FROM " +RestaurantInformation.Menu.TABLE_NAME;
+        return getReadableDatabase().rawQuery(sql,null);
     }
+
 
 }
