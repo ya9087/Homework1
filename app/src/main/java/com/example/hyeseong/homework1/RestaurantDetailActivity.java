@@ -7,6 +7,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -78,17 +81,48 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void getRestaruntInformation() {
-        Cursor cursor = mDbHelper.getAllUsersByMethod();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.plus:
+                startActivity(new Intent(this, MenuRegistrationActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void getRestaruntInformation() {
         TextView name = (TextView) findViewById(R.id.name);
         TextView address = (TextView) findViewById(R.id.address);
         TextView phone = (TextView) findViewById(R.id.phone);
 
-        name.setText(cursor.getString(1));
-        address.setText(cursor.getString(2));
-        phone.setText(cursor.getString(3));
+        Cursor cursor = mDbHelper.getAllUsersBySQL();
+
+        StringBuffer namebuffer = new StringBuffer();
+        StringBuffer addressbuffer = new StringBuffer();
+        StringBuffer phonebuffer = new StringBuffer();
+
+        while (cursor.moveToNext()) {
+            namebuffer.setLength(0);
+            addressbuffer.setLength(0);
+            phonebuffer.setLength(0);
+            namebuffer.append(cursor.getString(1) + "\t");
+            addressbuffer.append(cursor.getString(2) + "\t");
+            phonebuffer.append(cursor.getString(3) + "\n");
+        }
+        name.setText(namebuffer);
+        address.setText(addressbuffer);
+        phone.setText(phonebuffer);
+    }
     }
 
-}
 
