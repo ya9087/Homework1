@@ -13,6 +13,8 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+//안드로이드 4주차 강의자료를 활용하였습니다.
+
 class MyItem {
     String menuIcon;
     String menuName;

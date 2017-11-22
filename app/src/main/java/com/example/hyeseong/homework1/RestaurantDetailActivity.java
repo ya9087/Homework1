@@ -19,11 +19,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RestaurantDetailActivity extends AppCompatActivity implements RestaurantDetailFragment.OnTitleSelectedListener {
     static MyAdapter adapter;

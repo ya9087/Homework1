@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+//안드로이드 6주차 강의자료를 활용하였습니다.
+
 public class RestaurantDetailFragment extends Fragment {
 
     public interface OnTitleSelectedListener {

@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import java.io.File;
+
+//안드로이드 6주차 강의자료를 활용하였습니다.
 
 public class MenuDetailFragment extends Fragment {
 

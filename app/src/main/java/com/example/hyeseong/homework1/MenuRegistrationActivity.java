@@ -115,7 +115,7 @@ public class MenuRegistrationActivity extends AppCompatActivity {
 
             if (mPhotoFile != null) {
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
-                Uri imageUri = FileProvider.getUriForFile(this, "com.hansung.android.homework2", mPhotoFile);
+                Uri imageUri = FileProvider.getUriForFile(this, "com.example.hyeseong.homework1", mPhotoFile);
 
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);

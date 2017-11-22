@@ -2,6 +2,8 @@ package com.example.hyeseong.homework1;
 
 import android.provider.BaseColumns;
 
+//안드로이드 10주차 강의자료를 활용하였습니다.
+
 public class RestaurantInformation {
 
     public static final String DB_NAME = "Restaurant.db";
