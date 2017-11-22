@@ -1,0 +1,27 @@
+package com.example.hyeseong.homework1;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class RestaurantDetailFragment extends Fragment {
+
+    public interface OnTitleSelectedListener {
+        public void onTitleSelected(int i);
+    }
+
+    public RestaurantDetailFragment() {
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View rootView = (View) inflater.inflate(R.layout.activity_restaurant_detail, container, false);
+
+        return rootView;
+
+    }
+}
