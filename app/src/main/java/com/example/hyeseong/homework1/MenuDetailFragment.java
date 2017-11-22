@@ -1,15 +1,15 @@
 package com.example.hyeseong.homework1;
 
-import android.app.Fragment;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.io.File;
 
 public class MenuDetailFragment extends Fragment {

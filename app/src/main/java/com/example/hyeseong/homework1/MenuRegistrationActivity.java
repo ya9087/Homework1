@@ -27,16 +27,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Created by leeem on 2017-11-20.
- */
-
 public class MenuRegistrationActivity extends AppCompatActivity {
 
-
     private DBHelper mDbHelper;
-    final int REQUEST_CODE_READ_CONTACTS = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +38,8 @@ public class MenuRegistrationActivity extends AppCompatActivity {
 
         mDbHelper = new DBHelper(this);
 
-        if (ContextCompat.checkSelfPermission(MenuRegistrationActivity.this, Manifest.permission.READ_CONTACTS)
-                != PackageManager.PERMISSION_GRANTED) { // 권한이 없으므로, 사용자에게 권한 요청 다이얼로그 표시
-            ActivityCompat.requestPermissions(MenuRegistrationActivity.this,
-                    new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_READ_CONTACTS);
-        } //else // 권한 있음! 해당 데이터나 장치에 접근!
-        //getContacts();
-
         ImageButton menuPictureBtn = (ImageButton) findViewById(R.id.menuPictureBtn);
-        menuPictureBtn.setOnClickListener(new View.OnClickListener(){
+        menuPictureBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -63,67 +49,56 @@ public class MenuRegistrationActivity extends AppCompatActivity {
 
 
         Button menuRegisterBtn = (Button) findViewById(R.id.menuRegisterBtn);
-        menuRegisterBtn.setOnClickListener(new View.OnClickListener(){
+        menuRegisterBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RestaurantDetailActivity.class);
                 insertmenuRecord();
-                getMenuInformation();
+                setMenuInformation();
                 startActivity(intent);
+                finish();
             }
         });
     }
 
-    public void getMenuInformation() {
+    public void setMenuInformation() {
 
         Cursor cursor = mDbHelper.getAllMenusBySQL();
 
-
-        StringBuffer mnamebuffer = new StringBuffer();
-        StringBuffer mpricebuffer = new StringBuffer();
-        StringBuffer exbuffer = new StringBuffer();
-
-        // 데이터 원본 준비
-
+        String menuName;
+        String menuPrice;
+        String menuEx;
+        String image;
 
         ArrayList<MyItem> data = new ArrayList<MyItem>();
 
         while (cursor.moveToNext()) {
-            mnamebuffer.setLength(0);
-            mpricebuffer.setLength(0);
-            exbuffer.setLength(0);
+            menuName = cursor.getString(1);
+            menuPrice = cursor.getString(2);
+            menuEx = cursor.getString(3);
+            image = cursor.getString(4);
 
-            mnamebuffer.append(cursor.getString(1) + "\t");
-            mpricebuffer.append(cursor.getString(2) + "\t");
-            exbuffer.append(cursor.getString(3) + "\n");
-
-            data.add(new MyItem(R.drawable.s1,mnamebuffer.toString()  , mpricebuffer.toString(), exbuffer.toString()));
+            data.add(new MyItem(image, menuName, menuPrice, menuEx));
         }
-
         RestaurantDetailActivity.adapter = new MyAdapter(this, R.layout.item, data);
-
-       /* data.add(new MyItem(R.drawable.s1,  , "3000", "3.4"));
-        data.add(new MyItem(R.drawable.s2, "치즈라면", "2500", "4.0"));
-        data.add(new MyItem(R.drawable.s3, "간장돼불 덮밥", "3500", "4.2"));
-        data.add(new MyItem(R.drawable.s4, "육회비빔밥", "4500", "4.5"));
-        data.add(new MyItem(R.drawable.s5, "치즈불닭비빔밥", "4000", "3.9"));*/
-
     }
 
     private void insertmenuRecord() {
-        EditText name = (EditText)findViewById(R.id.menuName);
-        EditText price = (EditText)findViewById(R.id.menuPrice);
-        EditText explanation = (EditText)findViewById(R.id.menuExplanation);
+        EditText name = (EditText) findViewById(R.id.menuName);
+        EditText price = (EditText) findViewById(R.id.menuPrice);
+        EditText explanation = (EditText) findViewById(R.id.menuExplanation);
 
         mDbHelper.insertMenuByMethod(name.getText().toString(), price.getText().toString(), explanation.getText().toString(), mPhotoFileName);
     }
 
-    private String currentDateFormat(){
+    private String currentDateFormat() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
-        String  currentTimeStamp = dateFormat.format(new Date());
+        String currentTimeStamp = dateFormat.format(new Date());
         return currentTimeStamp;
     }
+
+    //안드로이드 10주차 강의자료를 활용하였습니다.
 
     String mPhotoFileName;
     File mPhotoFile;
@@ -135,15 +110,15 @@ public class MenuRegistrationActivity extends AppCompatActivity {
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             //1. 카메라 앱으로 찍은 이미지를 저장할 파일 객체 생성
-            mPhotoFileName = "IMG"+currentDateFormat()+".jpg";
+            mPhotoFileName = "IMG" + currentDateFormat() + ".jpg";
             mPhotoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), mPhotoFileName);
 
-            if (mPhotoFile !=null) {
+            if (mPhotoFile != null) {
                 //2. 생성된 파일 객체에 대한 Uri 객체를 얻기
                 Uri imageUri = FileProvider.getUriForFile(this, "com.hansung.android.homework2", mPhotoFile);
 
                 //3. Uri 객체를 Extras를 통해 카메라 앱으로 전달
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } else
                 Toast.makeText(getApplicationContext(), "file null", Toast.LENGTH_SHORT).show();
@@ -158,8 +133,6 @@ public class MenuRegistrationActivity extends AppCompatActivity {
                 ImageButton imageButton = (ImageButton) findViewById(R.id.menuPictureBtn);
                 imageButton.setImageURI(uri);
                 imageButton.setScaleType(ImageButton.ScaleType.FIT_XY);
-
-
             } else
                 Toast.makeText(getApplicationContext(), "mPhotoFile is null", Toast.LENGTH_SHORT).show();
         }

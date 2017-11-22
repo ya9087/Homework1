@@ -22,7 +22,7 @@ public class MenuDetailActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu_detail);
+        setContentView(R.layout.activity_details);
 
         if (getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE) {

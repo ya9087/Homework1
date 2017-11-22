@@ -25,67 +25,87 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 
-public class RestaurantDetailActivity extends AppCompatActivity {
+public class RestaurantDetailActivity extends AppCompatActivity implements RestaurantDetailFragment.OnTitleSelectedListener {
     static MyAdapter adapter;
+    private DBHelper mDBHelper;
+    static String mImage;
+    static String mName;
+    static String mPrice;
+    static String mEx;
 
-    private DBHelper mDbHelper;
+    //기기가 가로일 때 프래그먼트 설정과 세로일 때 프레그먼트 설정
+    public void onTitleSelected(int i) {
+        if (getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE) {
+            MenuDetailFragment detailsFragment = new MenuDetailFragment();
+            detailsFragment.getMenu(mImage, mName, mPrice, mEx);
+            getSupportFragmentManager().beginTransaction().replace(R.id.details, detailsFragment).commit();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), MenuDetailActivity.class);
+
+            intent.putExtra("MenuIcon", mImage);
+            intent.putExtra("MenuName", mName);
+            intent.putExtra("MenuPrice", mPrice);
+            intent.putExtra("MenuEx", mEx);
+
+            startActivity(intent);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurant_detail);
+        setContentView(R.layout.activity_main);
 
-        mDbHelper = new DBHelper(this);
+        mDBHelper = new DBHelper(this);
 
         getRestaruntInformation();
 
-
+        //데이터 베이스에서 식당의 번호를 불러와 설정
+        //이미지 클릭 시, 다이얼 화면으로 이동
         ImageButton btn = (ImageButton) findViewById(R.id.iconItem2);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:027604499"));
+                Cursor cursor = mDBHelper.getAllUsersBySQL();
+                String num = "";
+                while (cursor.moveToNext()) {
+                    num = cursor.getString(3);
+                }
+                Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + num));
                 startActivity(implicit_intent);
             }
         });
 
         //어댑터 연결
-        ListView listView = (ListView)findViewById(R.id.listView);
+        ListView listView = (ListView) findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
         listView.setDivider(new ColorDrawable(Color.GRAY));
         listView.setDividerHeight(3);
 
+        //리스트 뷰 클릭 시, MyItem 내용 저장
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View vClicked,
                                     int position, long id) {
-
-                int icon = ((MyItem)adapter.getItem(position)).menuIcon;
-                String name = ((MyItem)adapter.getItem(position)).menuName;
-                String price = ((MyItem)adapter.getItem(position)).menuPrice;
-                String grade = ((MyItem)adapter.getItem(position)).menuGrade;
-
-                Intent intent = new Intent(getApplicationContext(), MenuDetailActivity.class);
-
-                intent.putExtra("MenuIcon", icon);
-                intent.putExtra("MenuName", name);
-                intent.putExtra("MenuPrice", price);
-                intent.putExtra("MenuGrade", grade);
-
-                startActivity(intent);
+                mImage = ((MyItem) adapter.getItem(position)).menuIcon;
+                mName = ((MyItem) adapter.getItem(position)).menuName;
+                mPrice = ((MyItem) adapter.getItem(position)).menuPrice;
+                mEx = ((MyItem) adapter.getItem(position)).menuGrade;
+                onTitleSelected(position);
             }
         });
     }
 
-
-
-
+    //안드로이드 5주차 강의자료를 활용하였습니다.
+    //옵션 메뉴 생성
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
+    //메뉴아이템 클릭 시, MenuRegistrationActivity 불려짐
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -97,41 +117,36 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
     }
 
-
-
-    RestaurantRegistrationActivity RR;
+    //레스토랑의 정보를 데이터베이스에서 불러와 설정
     private void getRestaruntInformation() {
-
         TextView name = (TextView) findViewById(R.id.name);
         TextView address = (TextView) findViewById(R.id.address);
         TextView phone = (TextView) findViewById(R.id.phone);
-
-        Cursor cursor = mDbHelper.getAllUsersBySQL();
-
-        StringBuffer namebuffer = new StringBuffer();
-        StringBuffer addressbuffer = new StringBuffer();
-        StringBuffer phonebuffer = new StringBuffer();
-
-        while (cursor.moveToNext()) {
-            namebuffer.setLength(0);
-            addressbuffer.setLength(0);
-            phonebuffer.setLength(0);
-            namebuffer.append(cursor.getString(1) + "\t");
-            addressbuffer.append(cursor.getString(2) + "\t");
-            phonebuffer.append(cursor.getString(3) + "\n");
-        }
-        name.setText(namebuffer);
-        address.setText(addressbuffer);
-        phone.setText(phonebuffer);
-
         ImageView imageView = (ImageView) findViewById(R.id.picture);
 
-        imageView.setImageURI(RR.image_Uri);
+        Cursor cursor = mDBHelper.getAllUsersBySQL();
+
+        String rName;
+        String rAddress;
+        String rPhone;
+        String rImage;
+
+        while (cursor.moveToNext()) {
+            rName = cursor.getString(1);
+            rAddress = cursor.getString(2);
+            rPhone = cursor.getString(3);
+            rImage = cursor.getString(4);
+
+            name.setText(rName);
+            address.setText(rAddress);
+            phone.setText(rPhone);
+            if (rImage != null) {
+                File mPhotoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), rImage);
+                Uri uri = Uri.fromFile(mPhotoFile);
+                imageView.setImageURI(uri);
+            }
+        }
     }
-
-
-
 }
-
 
 
