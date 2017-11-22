@@ -99,7 +99,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
 
 
-
+    RestaurantRegistrationActivity RR;
     private void getRestaruntInformation() {
 
         TextView name = (TextView) findViewById(R.id.name);
@@ -123,6 +123,10 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         name.setText(namebuffer);
         address.setText(addressbuffer);
         phone.setText(phonebuffer);
+
+        ImageView imageView = (ImageView) findViewById(R.id.picture);
+
+        imageView.setImageURI(RR.image_Uri);
     }
 
 

@@ -19,17 +19,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MenuDetailActivity"
-            android:parentActivityName=".RestaurantDetailActivity"> </activity>
-        <activity android:name=".RestaurantDetailActivity"> </activity>
-        <activity android:name=".MenuRegistrationActivity"> </activity>
+        <activity
+            android:name=".MenuDetailActivity"
+            android:parentActivityName=".RestaurantDetailActivity"></activity>
+        <activity android:name=".RestaurantDetailActivity"></activity>
+        <activity android:name=".MenuRegistrationActivity"></activity>
 
 
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.hyeseong.homework1"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

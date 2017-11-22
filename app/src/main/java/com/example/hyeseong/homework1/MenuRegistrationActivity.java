@@ -116,7 +116,7 @@ public class MenuRegistrationActivity extends AppCompatActivity {
         EditText price = (EditText)findViewById(R.id.menuPrice);
         EditText explanation = (EditText)findViewById(R.id.menuExplanation);
 
-        mDbHelper.insertMenuByMethod(name.getText().toString(), price.getText().toString(), explanation.getText().toString());
+        mDbHelper.insertMenuByMethod(name.getText().toString(), price.getText().toString(), explanation.getText().toString(), mPhotoFileName);
     }
 
     private String currentDateFormat(){
